@@ -153,31 +153,6 @@
         - source
       when: structure.stat.exists != true
 
-    - name: Checking for Brotli
-      stat:
-        path: /usr/local/bin/brotli
-      register: brotli
-
-    - name: Cloning Brotli
-      git:
-        repo: https://github.com/google/brotli.git
-        dest: /srv/source/brotli
-        force: yes
-        update: yes
-      when: brotli.stat.exists != true
-
-    - name: Compiling Brotli
-      become: true
-      become_user: root
-      shell: |
-        ./configure-cmake && \
-        make && \
-        make install
-      args:
-        chdir: /srv/source/brotli
-        creates: /usr/local/bin/brotli
-      when: brotli.stat.exists != true
-
     - name: Cloning Depot Tools
       git:
         repo: https://chromium.googlesource.com/chromium/tools/depot_tools.git
@@ -326,14 +301,6 @@
       args:
         chdir: /srv/source/chromium/src
 
-    - name: Compressing Chromium
-      shell: |
-        brotli --best --force {{ item }}
-      args:
-        chdir: /srv/build/chromium
-      with_items:
-        - "chromium-{{ version.stdout }}"
-
     - name: Downloading Chromium
       fetch:
         src: "/srv/build/chromium/{{ item }}"
@@ -341,7 +308,7 @@
         flat: yes
         fail_on_missing: true
       with_items:
-        - "chromium-{{ version.stdout }}.br"
+        - "chromium-{{ version.stdout }}"
 
     - name: Archiving SwiftShader
       shell: |
@@ -351,16 +318,9 @@
         creates: /srv/build/chromium/swiftshader.tar
         warn: false
 
-    - name: Compressing SwiftShader
-      shell: |
-        brotli --best --force swiftshader.tar
-      args:
-        chdir: /srv/build/chromium
-        creates: /srv/build/chromium/swiftshader.tar.br
-
     - name: Downloading SwiftShader
       fetch:
-        src: /srv/build/chromium/swiftshader.tar.br
+        src: /srv/build/chromium/swiftshader.tar
         dest: ../../../bin/
         flat: yes
         fail_on_missing: true
