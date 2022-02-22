@@ -266,13 +266,13 @@
           is_debug = false
           proprietary_codecs = true
           symbol_level = 0
-          target_cpu = "x64"
+          target_cpu = "arm"
           target_os = "linux"
           use_bundled_fontconfig = true
           use_cups = false
           use_pulseaudio = false
           use_sysroot = true
-          v8_target_cpu = "x64"
+          v8_target_cpu = "arm"
         dest: /srv/source/chromium/src/out/Headless/args.gn
 
     - name: Generating Headless Chromium Configuration
