@@ -86,26 +86,23 @@
     - name: Installing Packages
       become: true
       become_user: root
-      yum:
-        name:
+      apt:
+        pkg:
           - "@Development Tools"
-          - binutils
+          - libc6-armel-cross
+          - libc6-dev-armel-cross
+          - binutils-arm-linux-gnueabi
+          - libncurses5-dev
+          - build-essential
           - bison
-          - bzip2
-          - cmake
-          - curl
-          - dbus-x11
           - flex
-          - git-core
-          - gperf
-          - patch
-          - perl
-          - python-setuptools
-          - python3
-          - rpm
-          - ruby
-          - subversion
-          - zip
+          - libssl-dev
+          - bc
+          - cmake
+          - gcc-arm-linux-gnueabihf
+          - g++-arm-linux-gnueabihf
+          - gcc-arm-linux-gnueabi
+          - g++-arm-linux-gnueabi
         state: latest
         update_cache: true
 
